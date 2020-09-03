@@ -1,0 +1,29 @@
+echo "installing overlay..."
+git clone https://github.com/swkim01/waveshare-dtoverlays.git
+sudo cp waveshare-dtoverlays/waveshare35b-v2.dtbo /boot/overlays/waveshare35b-v2.dtbo
+rm -rf waveshare-dtoverlays
+
+echo "writing configuration..."
+sudo vi /boot/config.txt
+# dtparam=spi=on
+# dtoverlay=waveshare35b-v2
+# hdmi_cvt=480 320 60 6 0 0 0
+# hdmi_group=2
+# hdmi_mode=87
+# hdmi_drive=1
+# hdmi_force_hotplug=1
+sudo reboot
+
+# install fbcp
+sudo apt-get install cmake
+git clone https://github.com/tasanakorn/rpi-fbcp
+cd rpi-fbcp/
+mkdir build
+cd build/
+cmake ..
+make
+sudo install fbcp /usr/local/bin/fbcp
+sudo vi /etc/rc.local
+# before "exit 0" enter:
+#   /usr/local/bin/fbcp &
+sudo reboot
